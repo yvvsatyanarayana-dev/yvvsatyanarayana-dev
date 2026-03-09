@@ -1,6 +1,5 @@
 <!-- Professional Banner -->
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:1f2937,100:111827&height=200&section=header&text=Y.V.V.%20Satyanarayana&fontSize=38&fontColor=ffffff"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=Backend%20Developer&fontSize=40&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=Python%20|%20API%20Development%20|%20Web%20Services&descAlignY=60"/>
 
 ---
 
@@ -31,9 +30,11 @@ Backend developer focused on building reliable APIs and solving real-world probl
 
 <p align="center">
 
-<img height="165" src="https://github-readme-stats.vercel.app/api?username=yvvsatyanarayana-dev&show_icons=true&theme=github_dark&hide_border=true"/>
+<img src="https://github-readme-stats.vercel.app/api?username=yvvsatyanarayana-dev&show_icons=true&theme=default&hide_border=true"/>
 
-<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=yvvsatyanarayana-dev&layout=compact&theme=github_dark&hide_border=true"/>
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=yvvsatyanarayana-dev&layout=compact&hide_border=true"/>
+
+</p>
 
 </p>
 
