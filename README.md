@@ -63,4 +63,4 @@ Backend developer focused on building reliable APIs and solving real-world probl
 </p>
 ---
 
-###⭐ Always learning and building better software.
+### Always learning and building better software.
