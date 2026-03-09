@@ -28,12 +28,11 @@ Backend developer focused on building reliable APIs and solving real-world probl
 
 <p align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=yvvsatyanarayana-dev&show_icons=true&theme=default&hide_border=true"/>
+<img height="165" src="https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api?username=yvvsatyanarayana-dev&show_icons=true&hide_border=true"/>
 
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=yvvsatyanarayana-dev&layout=compact&hide_border=true"/>
+<img height="165" src="https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api/top-langs/?username=yvvsatyanarayana-dev&layout=compact&hide_border=true"/>
 
 </p>
-
 </p>
 
 ---
