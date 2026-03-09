@@ -41,19 +41,19 @@ Backend developer focused on building reliable APIs and solving real-world probl
 <p align="left">
 
 <a href="https://github.com/yvvsatyanarayana-dev">
-<img src="https://skillicons.dev/icons?i=github" width="40"/>
+<img src="https://skillicons.dev/icons?i=github" width="40" style="margin-right:15px"/>
 </a>
 
 <a href="mailto:yvvsatyanarayana999@gmail.com">
-<img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="40"/>
+<img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="40" style="margin-right:15px"/>
 </a>
 
 <a href="https://dev.to/satyanarayana999">
-<img src="https://skillicons.dev/icons?i=devto" width="40"/>
+<img src="https://skillicons.dev/icons?i=devto" width="40" style="margin-right:15px"/>
 </a>
 
 <a href="https://www.hackerrank.com/yvvsatyanarayan1">
-<img src="https://cdn.worldvectorlogo.com/logos/hackerrank.svg" width="40"/>
+<img src="https://cdn.worldvectorlogo.com/logos/hackerrank.svg" width="40" style="margin-right:15px"/>
 </a>
 
 <a href="https://leetcode.com/y-v-v-satyanarayana">
@@ -61,7 +61,6 @@ Backend developer focused on building reliable APIs and solving real-world probl
 </a>
 
 </p>
-
 ---
 
-⭐ Always learning and building better software.
+###⭐ Always learning and building better software.
