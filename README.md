@@ -1,83 +1,51 @@
-<!-- Animated Typing Header -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:1f1c2c,100:928dab&height=220&section=header&text=Y.V.V.%20Satyanarayana&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Python%20Backend%20Developer%20|%20FastAPI%20|%20BCA%20Student&descAlignY=55"/>
 
 <p align="center">
-<img src="https://readme-typing-svg.herokuapp.com?size=26&color=00BFFF&center=true&vCenter=true&width=650&lines=Hi+👋,+I'm+Y.V.V.+Satyanarayana;Python+Backend+Developer;FastAPI+Developer;BCA+Student;Building+Real+World+Projects"/>
+<img src="https://readme-typing-svg.herokuapp.com?size=24&color=00C2FF&center=true&vCenter=true&width=600&lines=Python+Backend+Developer;FastAPI+Developer;BCA+Student;Building+Real+World+Projects"/>
 </p>
 
----
+<h1 align="center">Hi 👋, I'm Satyanarayana</h1>
 
-# 👋 Hi, I'm Y. V. V. Satyanarayana
-
-### 💻 Python Backend Developer | FastAPI | BCA Student
-
-I am a passionate **backend developer** who enjoys building **scalable APIs and solving real-world problems using Python**.
-Currently focusing on **backend development, system design, and improving communication skills** to become a professional software engineer.
+<p align="center">
+Passionate backend developer who loves building scalable APIs and solving real-world problems using Python.
+Currently focused on FastAPI, backend architecture, and improving technical communication.
+</p>
 
 ---
 
 ## 🚀 About Me
 
 * 🎓 Bachelor of Computer Applications (BCA)
-* 💻 Backend developer focused on **Python & FastAPI**
-* 🌱 Currently learning **System Design & Advanced Backend Concepts**
-* 🚀 Building real-world backend applications
+* 💻 Backend Developer focused on **Python & FastAPI**
+* 🌱 Currently learning **Advanced Backend Development**
+* 🚀 Building **real-world backend projects**
 * 🎯 Goal: Become a **professional backend engineer**
 
 ---
 
-## 🛠️ Tech Stack
-
-### 👨‍💻 Programming Languages
-
-<p>
-<img src="https://skillicons.dev/icons?i=python,javascript,cpp" />
-</p>
-
-### ⚙️ Backend Development
-
-<p>
-<img src="https://skillicons.dev/icons?i=fastapi,flask,nodejs" />
-</p>
-
-### 🗄️ Databases
-
-<p>
-<img src="https://skillicons.dev/icons?i=postgresql,mongodb,mysql" />
-</p>
-
-### 🌐 Frontend
-
-<p>
-<img src="https://skillicons.dev/icons?i=react,html,css,bootstrap" />
-</p>
-
-### 🧰 Tools
-
-<p>
-<img src="https://skillicons.dev/icons?i=git,github,vscode,postman,docker" />
-</p>
-
----
-
-## 📂 Projects
-
-🔹 **Smart Campus Platform**
-AI-powered platform for managing student learning, projects, and skill tracking.
-
-**Tech Stack:**
-React.js • FastAPI • PostgreSQL • JWT Authentication
-
----
-
-## 📊 GitHub Stats
+## 🛠 Tech Stack
 
 <p align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=yvvsatyanarayana-dev&show_icons=true&theme=tokyonight&hide_border=true"/>
+<img src="https://skillicons.dev/icons?i=python,fastapi,flask,react,js,html,css,bootstrap,postgresql,mongodb,mysql,git,github,vscode,postman,docker"/>
 
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=yvvsatyanarayana-dev&theme=tokyonight&hide_border=true"/>
+</p>
 
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=yvvsatyanarayana-dev&layout=compact&theme=tokyonight&hide_border=true"/>
+---
+
+## 📊 GitHub Statistics
+
+<p align="center">
+
+<img height="170" src="https://github-readme-stats.vercel.app/api?username=yvvsatyanarayana-dev&show_icons=true&theme=tokyonight&hide_border=true"/>
+
+<img height="170" src="https://github-readme-streak-stats.herokuapp.com/?user=yvvsatyanarayana-dev&theme=tokyonight&hide_border=true"/>
+
+</p>
+
+<p align="center">
+
+<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=yvvsatyanarayana-dev&layout=compact&theme=tokyonight&hide_border=true"/>
 
 </p>
 
@@ -85,22 +53,22 @@ React.js • FastAPI • PostgreSQL • JWT Authentication
 
 ## 🌐 Connect With Me
 
-<p>
+<p align="center">
 
 <a href="https://dev.to/satyanarayana999">
 <img src="https://skillicons.dev/icons?i=devto"/>
 </a>
 
 <a href="https://www.hackerrank.com/yvvsatyanarayan1">
-<img src="https://cdn.worldvectorlogo.com/logos/hackerrank.svg" width="40"/>
+<img src="https://cdn.worldvectorlogo.com/logos/hackerrank.svg" width="45"/>
 </a>
 
 <a href="https://leetcode.com/y-v-v-satyanarayana">
-<img src="https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png" width="40"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png" width="45"/>
 </a>
 
 </p>
 
 ---
 
-⭐ *Always learning, building, and improving as a developer.*
+⭐ Always learning and building impactful backend systems.
