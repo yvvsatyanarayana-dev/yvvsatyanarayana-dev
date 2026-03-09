@@ -39,35 +39,11 @@ Backend developer focused on building reliable APIs and solving real-world probl
 ## Connect
 
 <p align="left">
-
-<a href="https://github.com/yvvsatyanarayana-dev">
-<img src="https://skillicons.dev/icons?i=github" width="40"/>
-</a>
-
-&nbsp;&nbsp;&nbsp;&nbsp;
-
-<a href="mailto:yvvsatyanarayana999@gmail.com">
-<img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="40"/>
-</a>
-
-&nbsp;&nbsp;&nbsp;&nbsp;
-
-<a href="https://dev.to/satyanarayana999">
-<img src="https://skillicons.dev/icons?i=devto" width="40"/>
-</a>
-
-&nbsp;&nbsp;&nbsp;&nbsp;
-
-<a href="https://www.hackerrank.com/yvvsatyanarayan1">
-<img src="https://cdn.worldvectorlogo.com/logos/hackerrank.svg" width="40"/>
-</a>
-
-&nbsp;&nbsp;&nbsp;&nbsp;
-
-<a href="https://leetcode.com/y-v-v-satyanarayana">
-<img src="https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png" width="40"/>
-</a>
-
+<a href="https://github.com/yvvsatyanarayana-dev"><img src="https://skillicons.dev/icons?i=github" width="40"/></a>&nbsp;&nbsp;&nbsp;
+<a href="mailto:yvvsatyanarayana999@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="40"/></a>&nbsp;&nbsp;&nbsp;
+<a href="https://dev.to/satyanarayana999"><img src="https://skillicons.dev/icons?i=devto" width="40"/></a>&nbsp;&nbsp;&nbsp;
+<a href="https://www.hackerrank.com/yvvsatyanarayan1"><img src="https://cdn.worldvectorlogo.com/logos/hackerrank.svg" width="40"/></a>&nbsp;&nbsp;&nbsp;
+<a href="https://leetcode.com/y-v-v-satyanarayana"><img src="https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png" width="40"/></a>
 </p>
 
 ### ⭐ Always learning and building better software.
