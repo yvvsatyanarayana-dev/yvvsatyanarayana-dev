@@ -21,7 +21,7 @@ Backend developer focused on building reliable APIs and solving real-world probl
 ## Tech Stack
 
 <p align="center">
-<img src="https://skillicons.dev/icons?i=python,fastapi,flask,react,javascript,html,css,bootstrap,postgresql,mongodb,git,github,vscode,postman"/>
+<img src="https://skillicons.dev/icons?i=python,cpp,fastapi,flask,react,javascript,html,css,bootstrap,postgresql,mongodb,git,github,vscode,postman"/>
 </p>
 
 ---
