@@ -1,5 +1,5 @@
 <!-- Professional Banner -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=BACKEND%20DEVELOPER&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=PYTHON%20|%20API%20DEVELOPMENT%20|%20WEB%20SERVICES&descAlignY=60"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=SOFTWARE%20DEVELOPER&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=PYTHON%20|%20API%20DEVELOPMENT%20|%20WEB%20SERVICES&descAlignY=60"/>
 
 ---
 
