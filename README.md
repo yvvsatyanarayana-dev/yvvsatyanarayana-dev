@@ -26,7 +26,7 @@
       <img src="./portrait-ascii.svg" width="420" alt="Satyanarayana — Self-Typing ASCII Portrait" />
     </td>
     <td valign="top" align="center">
-      <img src="./info-card.svg" width="420" alt="Satyanarayana — Neofetch Info Card" />
+      <img src="./stats.svg" width="420" alt="Satyanarayana's GitHub streak and contribution stats — auto-refreshed daily" />
     </td>
   </tr>
 </table>
@@ -56,12 +56,12 @@
 
 <br>
 
-<!-- Optional toggle/details for full metrics card -->
+<!-- Optional toggle/details for neofetch info card -->
 <details>
-  <summary><b>📊 Click to view full analytics & monthly breakdown (<code>./stats.sh</code>)</b></summary>
+  <summary><b>💻 Click to view system info card (<code>neofetch</code>)</b></summary>
   <br>
   <p align="center">
-    <img src="./stats.svg" width="600" alt="Satyanarayana — Stats & Monthly Activity" />
+    <img src="./info-card.svg" width="600" alt="Satyanarayana — Neofetch Info Card" />
   </p>
 </details>
 

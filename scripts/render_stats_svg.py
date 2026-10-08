@@ -51,7 +51,8 @@ BAR_DUR = 0.6
 def short_date(d):
     if not d:
         return "—"
-    return datetime.date.fromisoformat(d).strftime("%b %d")
+    dt = datetime.date.fromisoformat(d)
+    return f"{dt.strftime('%b')} {dt.day}"
 
 
 def span(s):
@@ -83,7 +84,7 @@ def render():
         ("longest streak", lng["length"], " days", span(lng), INK),
         ("contributions", total_contrib, "", "in the last year", INK),
         ("active days", active_days, f" / {n_days}", f"{(active_days / n_days) * 100:.0f}% of the year", INK),
-        ("best day", best["count"], "", short_date(best["date"]), CYAN),
+        ("best day", best["count"], "", short_date(best["date"]), INK),
         ("avg / active day", avg_per_day, "", "contributions", INK),
     ]
 
