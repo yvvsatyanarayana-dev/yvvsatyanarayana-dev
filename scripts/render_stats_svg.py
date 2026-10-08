@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Render the streak / numbers card as an elite Hyprland / glassmorphism terminal SVG:
-- Glassmorphic chassis with gradient specular border and ambient backdrop
-- 6 stat tiles with glass styling and colored status pill badges
-- Multi-frame mechanical count-up easing
-- Monthly contribution bar chart with benchmark gridline and glowing peak indicator
-- Interactive CSS hover states
+Render the streak / numbers card from data/contributions.json as an animated
+terminal-window SVG (stats.svg) that pairs symmetrically with the ASCII portrait.
+
+- Canvas: 840 x 880
+- 6 stat tiles with fluid slide-in and multi-frame SMIL count-up animations
+- Monthly contribution bar chart with spring scale-up and peak month indicator
+- Interactive CSS hover effects
 Outputs: stats.svg
 """
 
@@ -19,23 +20,23 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "data", "contributions.json")
 OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "..", "stats.svg")
 
-BG = "#060911"
-BG2 = "#0e1526"
-TILE = "#0f172a"
-FRAME = "#1e293b"
-MUTED = "#94a3b8"
-INK = "#f8fafc"
-GREEN = "#34d399"
-BAR_COLOR = "#059669"
-PEAK_COLOR = "#38bdf8"
+BG = "#0d1117"
+BG2 = "#111722"
+TILE = "#161b22"
+FRAME = "#30363d"
+MUTED = "#7d8590"
+INK = "#e6edf3"
+GREEN = "#39d353"
+BAR = "#238636"
+HOVER_STROKE = "#58a6ff"
 
 W, H = 840, 880
-PAD = 22
-TITLEBAR_H = 38
+PAD = 20
+TITLEBAR_H = 34
 COLS, ROWS = 2, 3
 GAP = 16
 TILE_W = (W - PAD * 2 - GAP * (COLS - 1)) / COLS
-TILE_H = 148
+TILE_H = 150
 TILES_TOP = TITLEBAR_H + PAD + 6
 CHART_TOP = TILES_TOP + ROWS * TILE_H + (ROWS - 1) * GAP + GAP
 
@@ -80,14 +81,13 @@ def render():
     total_contrib = data.get("total_contributions", 0)
     avg_per_day = data.get("avg_per_active_day", 0.0)
 
-    # (label, value, suffix, caption, accent, badge_text, badge_bg, badge_fg)
     tiles = [
-        ("current streak", cur["length"], " days", span(cur), GREEN, "LIVE", "#064e3b", "#34d399"),
-        ("longest streak", lng["length"], " days", span(lng), INK, "RECORD", "#312e81", "#818cf8"),
-        ("contributions", total_contrib, "", "in the last year", INK, "ANNUAL", "#0c4a6e", "#38bdf8"),
-        ("active days", active_days, f" / {n_days}", f"{(active_days / n_days) * 100:.0f}% of the year", INK, "CONSISTENCY", "#78350f", "#fbbf24"),
-        ("best day", best["count"], "", short_date(best["date"]), INK, "PEAK", "#831843", "#f472b6"),
-        ("avg / active day", avg_per_day, "", "contributions", INK, "RATE", "#134e4a", "#2dd4bf"),
+        ("current streak", cur["length"], " days", span(cur), GREEN),
+        ("longest streak", lng["length"], " days", span(lng), INK),
+        ("contributions", total_contrib, "", "in the last year", INK),
+        ("active days", active_days, f" / {n_days}", f"{(active_days / n_days) * 100:.0f}% of the year", INK),
+        ("best day", best["count"], "", short_date(best["date"]), INK),
+        ("avg / active day", avg_per_day, "", "contributions", INK),
     ]
 
     css = f"""
@@ -95,13 +95,13 @@ def render():
   opacity: 0;
   animation: slideIn {SLIDE_DUR}s cubic-bezier(0.16, 1, 0.3, 1) both;
 }}
-.tile-glass {{
+.tile-box {{
   transition: stroke 0.25s ease, filter 0.25s ease;
 }}
-.t:hover .tile-glass {{
-  stroke: #38bdf8;
+.t:hover .tile-box {{
+  stroke: {HOVER_STROKE};
   stroke-width: 1.5;
-  filter: drop-shadow(0 6px 16px rgba(56, 189, 248, 0.2));
+  filter: drop-shadow(0 4px 12px rgba(88, 166, 255, 0.2));
 }}
 @keyframes slideIn {{
   0%   {{ opacity: 0; transform: translateY(16px); }}
@@ -115,7 +115,7 @@ def render():
   transition: filter 0.2s ease;
 }}
 .b:hover {{
-  filter: brightness(1.3) drop-shadow(0 -3px 8px #34d399);
+  filter: brightness(1.25) drop-shadow(0 -3px 8px {GREEN});
   cursor: pointer;
 }}
 @keyframes grow {{
@@ -132,48 +132,26 @@ def render():
         f'<style>{css}</style>',
         '<defs>',
         f'<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">',
-        f'<stop offset="0%" stop-color="{BG2}"/><stop offset="100%" stop-color="{BG}"/>',
-        '</linearGradient>',
-        f'<linearGradient id="glassBorder" x1="0" y1="0" x2="1" y2="1">',
-        '<stop offset="0%" stop-color="#38bdf8" stop-opacity="0.6"/>',
-        '<stop offset="50%" stop-color="#818cf8" stop-opacity="0.2"/>',
-        '<stop offset="100%" stop-color="#38bdf8" stop-opacity="0.4"/>',
-        '</linearGradient>',
-        f'<linearGradient id="tileBorder" x1="0" y1="0" x2="1" y2="1">',
-        '<stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>',
-        '<stop offset="100%" stop-color="#1e293b" stop-opacity="0.8"/>',
+        f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/>',
         '</linearGradient>',
         f'<linearGradient id="peakbar" x1="0" y1="0" x2="0" y2="1">',
-        '<stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0284c7"/>',
-        '</linearGradient>',
-        f'<linearGradient id="normbar" x1="0" y1="0" x2="0" y2="1">',
-        f'<stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="{BAR_COLOR}"/>',
+        f'<stop offset="0" stop-color="#69f0a0"/><stop offset="1" stop-color="{GREEN}"/>',
         '</linearGradient>',
         '</defs>',
-        f'<rect width="{W}" height="{H}" rx="14" fill="url(#bg)"/>',
-        f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="14" fill="none" stroke="url(#glassBorder)" stroke-width="1.2"/>',
-        f'<line x1="0" y1="{TITLEBAR_H}" x2="{W}" y2="{TITLEBAR_H}" stroke="{FRAME}" stroke-opacity="0.9"/>',
+        f'<rect width="{W}" height="{H}" rx="12" fill="url(#bg)"/>',
+        f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="12" fill="none" stroke="{FRAME}"/>',
+        f'<line x1="0" y1="{TITLEBAR_H}" x2="{W}" y2="{TITLEBAR_H}" stroke="{FRAME}"/>',
     ]
 
-    # Titlebar controls
     for i, dot in enumerate(["#ff5f56", "#ffbd2e", "#27c93f"]):
-        parts.append(f'<circle cx="{PAD + i*18}" cy="{TITLEBAR_H/2}" r="5.5" fill="{dot}"/>')
+        parts.append(f'<circle cx="{PAD + i*16}" cy="{TITLEBAR_H/2}" r="5" fill="{dot}"/>')
     parts.append(
         f'<text x="{W/2}" y="{TITLEBAR_H/2 + 4}" fill="{MUTED}" font-size="12" '
-        f'font-weight="600" text-anchor="middle">satyanarayana@hyprland: ~$ ./stats.sh</text>'
-    )
-    # Top right runtime badges
-    parts.append(
-        f'<g transform="translate({W - PAD - 150}, {TITLEBAR_H/2 - 10})">'
-        f'<rect width="70" height="20" rx="5" fill="#1e293b"/>'
-        f'<text x="35" y="14" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">⎇ main</text>'
-        f'<rect x="76" width="68" height="20" rx="5" fill="#1e293b"/>'
-        f'<text x="110" y="14" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">● synced</text>'
-        f'</g>'
+        f'text-anchor="middle">satyanarayana@github: ~$ ./stats.sh</text>'
     )
 
     # Stat tiles
-    for i, (label, value, suffix, caption, accent, b_text, b_bg, b_fg) in enumerate(tiles):
+    for i, (label, value, suffix, caption, accent) in enumerate(tiles):
         col, row = i % COLS, i // COLS
         x = PAD + col * (TILE_W + GAP)
         y = TILES_TOP + row * (TILE_H + GAP)
@@ -181,22 +159,14 @@ def render():
         count_start = start + SLIDE_DUR * 0.55
 
         parts.append(f'<g class="t" style="animation-delay:{start:.2f}s">')
-        parts.append(f'<rect class="tile-glass" x="{x:.1f}" y="{y}" width="{TILE_W:.1f}" height="{TILE_H}" rx="10" '
-                     f'fill="{TILE}" stroke="url(#tileBorder)" stroke-width="1.1"/>')
+        parts.append(f'<rect class="tile-box" x="{x:.1f}" y="{y}" width="{TILE_W:.1f}" height="{TILE_H}" rx="10" '
+                     f'fill="{TILE}" stroke="{FRAME}"/>')
+        parts.append(f'<text x="{x+24:.1f}" y="{y+40}" fill="{MUTED}" font-size="22">$ {html.escape(label)}</text>')
 
-        # Tile header with label and status pill badge
-        parts.append(f'<text x="{x+20:.1f}" y="{y+36}" fill="{MUTED}" font-size="16" font-weight="600">$ {html.escape(label)}</text>')
-
-        # Status badge pill
-        bw = len(b_text) * 8 + 14
-        bx = x + TILE_W - bw - 16
-        parts.append(f'<rect x="{bx:.1f}" y="{y+20}" width="{bw}" height="19" rx="9" fill="{b_bg}"/>')
-        parts.append(f'<text x="{bx + bw/2:.1f}" y="{y+33}" fill="{b_fg}" font-size="9.5" font-weight="700" text-anchor="middle">{b_text}</text>')
-
-        # Metric value with mechanical easing
-        num_y = y + 96
+        num_y = y + 100
         for k in range(1, FRAMES + 1):
             p = k / FRAMES
+            # Decelerating easing curve for count-up
             v = value * (1 - (1 - p) ** 3.5)
             t_on = count_start + COUNT_DUR * (k - 1) / FRAMES
             t_off = count_start + COUNT_DUR * k / FRAMES
@@ -204,58 +174,43 @@ def render():
             if k < FRAMES:
                 anim += f'<set attributeName="opacity" to="0" begin="{t_off:.3f}s"/>'
             parts.append(
-                f'<text x="{x+20:.1f}" y="{num_y}" opacity="0" font-size="50" font-weight="700" fill="{accent}">'
-                f'{fmt(v, value)}<tspan font-size="22" font-weight="400" fill="{MUTED}">{html.escape(suffix)}</tspan>'
+                f'<text x="{x+24:.1f}" y="{num_y}" opacity="0" font-size="54" font-weight="700" fill="{accent}">'
+                f'{fmt(v, value)}<tspan font-size="24" font-weight="400" fill="{MUTED}">{html.escape(suffix)}</tspan>'
                 f'{anim}</text>'
             )
-        parts.append(f'<text x="{x+20:.1f}" y="{y+128}" fill="{MUTED}" font-size="14">{html.escape(caption)}</text>')
+        parts.append(f'<text x="{x+24:.1f}" y="{y+132}" fill="{MUTED}" font-size="20">{html.escape(caption)}</text>')
         parts.append('</g>')
 
-    # Monthly bar chart panel
+    # Monthly bars
     monthly = data.get("monthly", [])
     chart_x, chart_w = PAD, W - PAD * 2
     chart_h = H - PAD - CHART_TOP
     parts.append(f'<g class="t" style="animation-delay:{BAR_START - 0.25:.2f}s">')
-    parts.append(f'<rect class="tile-glass" x="{chart_x}" y="{CHART_TOP}" width="{chart_w}" height="{chart_h}" rx="10" '
-                 f'fill="{TILE}" stroke="url(#tileBorder)" stroke-width="1.1"/>')
-    parts.append(f'<text x="{chart_x+20}" y="{CHART_TOP+34}" fill="{MUTED}" font-size="16" font-weight="600">$ contributions / month</text>')
-
-    # Chart header badge
-    cb_text = "MONTHLY ACTIVITY"
-    cb_w = len(cb_text) * 7.5 + 14
-    cb_x = chart_x + chart_w - cb_w - 18
-    parts.append(f'<rect x="{cb_x:.1f}" y="{CHART_TOP+18}" width="{cb_w}" height="19" rx="9" fill="#0c4a6e"/>')
-    parts.append(f'<text x="{cb_x + cb_w/2:.1f}" y="{CHART_TOP+31}" fill="#38bdf8" font-size="9.5" font-weight="700" text-anchor="middle">{cb_text}</text>')
+    parts.append(f'<rect class="tile-box" x="{chart_x}" y="{CHART_TOP}" width="{chart_w}" height="{chart_h}" rx="10" '
+                 f'fill="{TILE}" stroke="{FRAME}"/>')
+    parts.append(f'<text x="{chart_x+24}" y="{CHART_TOP+40}" fill="{MUTED}" font-size="22">$ contributions / month</text>')
     parts.append('</g>')
 
     if monthly:
-        plot_top = CHART_TOP + 62
-        plot_bot = CHART_TOP + chart_h - 38
+        plot_top = CHART_TOP + 64
+        plot_bot = CHART_TOP + chart_h - 40
         plot_l, plot_r = chart_x + 24, chart_x + chart_w - 24
-
-        # Dotted baseline grid guide
-        mid_y = (plot_top + plot_bot) / 2
-        parts.append(f'<line x1="{plot_l}" y1="{mid_y:.1f}" x2="{plot_r}" y2="{mid_y:.1f}" stroke="{FRAME}" stroke-dasharray="3 4" stroke-opacity="0.6"/>')
-
         slot = (plot_r - plot_l) / len(monthly)
         bar_w = slot * 0.62
         peak = max(m["total"] for m in monthly) or 1
         for i, m in enumerate(monthly):
-            h = max(4, (plot_bot - plot_top) * m["total"] / peak)
+            h = max(3, (plot_bot - plot_top) * m["total"] / peak)
             bx = plot_l + i * slot + (slot - bar_w) / 2
-            fill = "url(#peakbar)" if m["total"] == peak else "url(#normbar)"
+            fill = "url(#peakbar)" if m["total"] == peak else BAR
             delay = BAR_START + i * BAR_STAGGER
             parts.append(f'<rect class="b" x="{bx:.1f}" y="{plot_bot - h:.1f}" width="{bar_w:.1f}" height="{h:.1f}" '
-                         f'rx="4" fill="{fill}" style="animation-delay:{delay:.2f}s"/>')
+                         f'rx="3" fill="{fill}" style="animation-delay:{delay:.2f}s"/>')
             mon = datetime.date.fromisoformat(m["month"] + "-01").strftime("%b")[0]
-            parts.append(f'<text x="{bx + bar_w/2:.1f}" y="{plot_bot + 24}" fill="{MUTED}" font-size="14" font-weight="600" '
+            parts.append(f'<text x="{bx + bar_w/2:.1f}" y="{plot_bot + 28}" fill="{MUTED}" font-size="18" '
                          f'text-anchor="middle">{mon}</text>')
             if m["total"] == peak:
-                # Glowing peak badge
-                parts.append(f'<g class="t" style="animation-delay:{delay + BAR_DUR:.2f}s">')
-                parts.append(f'<rect x="{bx + bar_w/2 - 24:.1f}" y="{plot_bot - h - 22:.1f}" width="48" height="18" rx="4" fill="#0284c7"/>')
-                parts.append(f'<text x="{bx + bar_w/2:.1f}" y="{plot_bot - h - 9:.1f}" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">{peak:,}</text>')
-                parts.append('</g>')
+                parts.append(f'<text class="t" style="animation-delay:{delay + BAR_DUR:.2f}s" x="{bx + bar_w/2:.1f}" '
+                             f'y="{plot_bot - h - 10:.1f}" fill="{INK}" font-size="18" font-weight="700" text-anchor="middle">{peak:,}</text>')
 
     parts.append('</svg>')
     svg = "".join(parts)

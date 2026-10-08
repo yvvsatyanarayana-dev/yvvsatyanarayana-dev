@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """
-Convert prepped portrait image into an elite Hyprland / Neovim terminal ASCII SVG:
-- Sleek glassmorphic gradient chassis with ambient lighting and specular borders
-- Crisp monochrome ASCII art with glowing sweep scan-cursor
-- Starship / Neovim powerline statusline at bottom with true SVG chevron segments
-- Top titlebar with window controls, active branch badge, and runtime tag
+Convert a prepped portrait image into an enhanced animated ASCII SVG:
+- Clean monochrome light-gray palette on dark terminal background
+- High-contrast density character ramp with leading space for clean backdrop
+- Enhanced typewriter reveal: horizontal clip wipe with a glowing traveling block cursor
+- Staggered top-to-bottom cascade that freezes into crisp high-res ASCII
+- Interactive bottom status prompt that dynamically types out 'whoami Satyanarayana'
+  with a steady blinking terminal cursor
 - Strictly valid XML for GitHub Camo caching
 
 Outputs: portrait-ascii.svg
@@ -24,7 +26,7 @@ COLS = int(os.environ.get("COLS", 156))
 ART_W = 790.0
 CELL_W = ART_W / COLS
 CELL_H = CELL_W * 1.76
-ROWS = 82
+ROWS = 84
 RAMP = " .`:-=+*cs#%@"  # Bright (space) -> dark (dense)
 
 # Image tuning parameters
@@ -34,22 +36,23 @@ GAMMA = 1.14
 WHITE_FLOOR = 0.82
 
 PAD = 25
-TITLEBAR_H = 38
-STATUS_H = 46
+TITLEBAR_H = 34
+STATUS_H = 36
 CANVAS_W = 840
 CANVAS_H = 880
 
-BG = "#060911"
-BG2 = "#0e1526"
-FRAME = "#1e293b"
-TITLE_TEXT = "#94a3b8"
-INK = "#e2e8f0"
-CURSOR = "#38bdf8"
+BG = "#0d1117"
+BG2 = "#111722"
+FRAME = "#30363d"
+TITLE_TEXT = "#7d8590"
+INK = "#c9d1d9"
+CURSOR = "#22d3ee"
 
-SWEEP_DUR = 4.6
+# Animation timing
+SWEEP_DUR = 4.8
 ROW_DUR = SWEEP_DUR / ROWS
 STAGGER = ROW_DUR
-STATUS_START = SWEEP_DUR + 0.1
+STATUS_START = SWEEP_DUR + 0.15
 
 STATIC = bool(os.environ.get("STATIC"))
 
@@ -88,9 +91,6 @@ def generate():
   50%, 100% {{ opacity: 0; }}
 }}
 .blink {{ animation: blink 1s step-start infinite; }}
-.glow-cursor {{
-  filter: drop-shadow(0 0 6px #38bdf8);
-}}
 @media (prefers-reduced-motion: reduce) {{
   * {{ animation: none !important; }}
 }}
@@ -102,37 +102,24 @@ def generate():
         f'<style>{css}</style>',
         '<defs>',
         f'<linearGradient id="pbg" x1="0" y1="0" x2="0" y2="1">',
-        f'<stop offset="0%" stop-color="{BG2}"/><stop offset="100%" stop-color="{BG}"/>',
+        f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/>',
         '</linearGradient>',
-        f'<linearGradient id="glassBorder" x1="0" y1="0" x2="1" y2="1">',
-        '<stop offset="0%" stop-color="#38bdf8" stop-opacity="0.6"/>',
-        '<stop offset="50%" stop-color="#818cf8" stop-opacity="0.2"/>',
-        '<stop offset="100%" stop-color="#38bdf8" stop-opacity="0.4"/>',
-        '</linearGradient>',
+        '<filter id="glow" x="-20%" y="-20%" width="140%" height="140%">',
+        '<feGaussianBlur stdDeviation="2" result="blur"/>',
+        '<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
+        '</filter>',
         '</defs>',
-        # Glass backdrop and subtle border
-        f'<rect width="{CANVAS_W}" height="{CANVAS_H}" rx="14" fill="url(#pbg)"/>',
-        f'<rect x="0.5" y="0.5" width="{CANVAS_W-1}" height="{CANVAS_H-1}" rx="14" fill="none" stroke="url(#glassBorder)" stroke-width="1.2"/>',
-        f'<line x1="0" y1="{TITLEBAR_H}" x2="{CANVAS_W}" y2="{TITLEBAR_H}" stroke="{FRAME}" stroke-opacity="0.9"/>',
+        f'<rect width="{CANVAS_W}" height="{CANVAS_H}" rx="12" fill="url(#pbg)"/>',
+        f'<rect x="0.5" y="0.5" width="{CANVAS_W-1}" height="{CANVAS_H-1}" rx="12" fill="none" stroke="{FRAME}" stroke-width="1"/>',
+        f'<line x1="0" y1="{TITLEBAR_H}" x2="{CANVAS_W}" y2="{TITLEBAR_H}" stroke="{FRAME}" stroke-opacity="0.8"/>',
     ]
 
     # Titlebar controls
     for i, dotcol in enumerate(["#ff5f56", "#ffbd2e", "#27c93f"]):
         parts.append(f'<circle cx="{PAD + i*18}" cy="{TITLEBAR_H/2}" r="5.5" fill="{dotcol}"/>')
-
     parts.append(
         f'<text x="{CANVAS_W/2}" y="{TITLEBAR_H/2 + 4}" fill="{TITLE_TEXT}" font-size="12" '
-        f'font-weight="600" text-anchor="middle">satyanarayana@hyprland: ~$ ./portrait.sh</text>'
-    )
-
-    # Top right runtime badges
-    parts.append(
-        f'<g transform="translate({CANVAS_W - PAD - 150}, {TITLEBAR_H/2 - 10})">'
-        f'<rect width="70" height="20" rx="5" fill="#1e293b"/>'
-        f'<text x="35" y="14" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle">⎇ main</text>'
-        f'<rect x="76" width="68" height="20" rx="5" fill="#1e293b"/>'
-        f'<text x="110" y="14" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">● active</text>'
-        f'</g>'
+        f'text-anchor="middle">satyanarayana@github: ~$ ./portrait.sh</text>'
     )
 
     # ASCII text rows
@@ -158,70 +145,44 @@ def generate():
         )
         parts.append(f'<g clip-path="url(#r{ry})">{text}</g>')
         parts.append(
-            f'<rect class="glow-cursor" y="{row_y+0.5:.1f}" width="{CELL_W:.1f}" height="{CELL_H-1:.1f}" fill="{CURSOR}" opacity="0">'
+            f'<rect y="{row_y+0.5:.1f}" width="{CELL_W:.1f}" height="{CELL_H-1:.1f}" fill="{CURSOR}" opacity="0" filter="url(#glow)">'
             f'<animate attributeName="x" from="{art_left:.1f}" to="{art_left+ART_W:.1f}" begin="{delay:.3f}s" '
             f'dur="{ROW_DUR:.2f}s" fill="freeze"/>'
-            f'<set attributeName="opacity" to="0.95" begin="{delay:.3f}s"/>'
+            f'<set attributeName="opacity" to="0.9" begin="{delay:.3f}s"/>'
             f'<set attributeName="opacity" to="0" begin="{delay+ROW_DUR:.3f}s"/></rect>'
         )
 
-    # Bottom Neovim / Starship Powerline Statusbar
-    status_line_y = CANVAS_H - STATUS_H - 12
-    parts.append(f'<line x1="0" y1="{status_line_y:.1f}" x2="{CANVAS_W}" y2="{status_line_y:.1f}" stroke="{FRAME}" stroke-opacity="0.9"/>')
+    # Bottom status bar
+    status_line_y = CANVAS_H - STATUS_H - 10
+    status_y = status_line_y + 24
+    parts.append(f'<line x1="0" y1="{status_line_y:.1f}" x2="{CANVAS_W}" y2="{status_line_y:.1f}" stroke="{FRAME}" stroke-opacity="0.8"/>')
 
-    # Draw Powerline Segments
-    pl_y = status_line_y + 11
-    pl_h = 24
-    chev_w = 9
+    prompt_prefix = "satyanarayana@github:~$ "
+    cmd_text = "whoami "
+    name_text = "Satyanarayana"
 
-    # Segment 1: NORMAL mode
-    s1_x, s1_w, s1_c = PAD, 68, "#6366f1"
-    parts.append(f'<rect x="{s1_x}" y="{pl_y}" width="{s1_w}" height="{pl_h}" rx="4" fill="{s1_c}"/>')
-    parts.append(f'<text x="{s1_x + s1_w/2}" y="{pl_y + 16}" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">NORMAL</text>')
-    # Chevron 1
-    c1_x = s1_x + s1_w
-    parts.append(f'<path d="M{c1_x},{pl_y} L{c1_x+chev_w},{pl_y+pl_h/2} L{c1_x},{pl_y+pl_h} Z" fill="{s1_c}"/>')
-
-    # Segment 2: User / Host
-    s2_x, s2_w, s2_c = c1_x + 2, 114, "#0284c7"
-    parts.append(f'<rect x="{s2_x}" y="{pl_y}" width="{s2_w}" height="{pl_h}" fill="{s2_c}"/>')
-    parts.append(f'<text x="{s2_x + s2_w/2}" y="{pl_y + 16}" fill="#ffffff" font-size="11" font-weight="600" text-anchor="middle">satyanarayana</text>')
-    # Chevron 2
-    c2_x = s2_x + s2_w
-    parts.append(f'<path d="M{c2_x},{pl_y} L{c2_x+chev_w},{pl_y+pl_h/2} L{c2_x},{pl_y+pl_h} Z" fill="{s2_c}"/>')
-
-    # Segment 3: Git branch
-    s3_x, s3_w, s3_c = c2_x + 2, 78, "#059669"
-    parts.append(f'<rect x="{s3_x}" y="{pl_y}" width="{s3_w}" height="{pl_h}" fill="{s3_c}"/>')
-    parts.append(f'<text x="{s3_x + s3_w/2}" y="{pl_y + 16}" fill="#ffffff" font-size="11" font-weight="600" text-anchor="middle">git:(main)</text>')
-    # Chevron 3
-    c3_x = s3_x + s3_w
-    parts.append(f'<path d="M{c3_x},{pl_y} L{c3_x+chev_w},{pl_y+pl_h/2} L{c3_x},{pl_y+pl_h} Z" fill="{s3_c}"/>')
-
-    # Command prompt after powerline: whoami ➜ Satyanarayana
-    prompt_x = c3_x + chev_w + 14
-    prompt_y = pl_y + 16
-    prompt_w = 280
+    prompt_x = PAD
+    prompt_w = 400
 
     parts.append(
-        f'<clipPath id="status_clip"><rect x="{prompt_x}" y="{pl_y}" width="0" height="{pl_h}">'
-        f'<animate attributeName="width" from="0" to="{prompt_w}" begin="{STATUS_START:.2f}s" dur="0.75s" fill="freeze"/>'
+        f'<clipPath id="status_clip"><rect x="{prompt_x}" y="{status_line_y+4}" width="0" height="{STATUS_H}">'
+        f'<animate attributeName="width" from="0" to="{prompt_w}" begin="{STATUS_START:.2f}s" dur="0.8s" fill="freeze"/>'
         f'</rect></clipPath>'
     )
     parts.append(
         f'<g clip-path="url(#status_clip)">'
-        f'<text x="{prompt_x}" y="{prompt_y}" font-size="12">'
-        f'<tspan fill="#38bdf8">whoami </tspan>'
-        f'<tspan fill="{TITLE_TEXT}">➜ </tspan>'
-        f'<tspan fill="#f8fafc" font-weight="700">Satyanarayana</tspan>'
+        f'<text x="{prompt_x}" y="{status_y:.1f}" font-size="13">'
+        f'<tspan fill="{TITLE_TEXT}">{html.escape(prompt_prefix)}</tspan>'
+        f'<tspan fill="{TITLE_TEXT}">{html.escape(cmd_text)}</tspan>'
+        f'<tspan fill="{INK}" font-weight="600">{html.escape(name_text)}</tspan>'
         f'</text></g>'
     )
 
-    # Blinking prompt cursor
-    cur_x = prompt_x + len("whoami ➜ Satyanarayana") * 7.4 + 4
+    # Terminal cursor that appears right after typing finishes
+    cursor_x = prompt_x + len(prompt_prefix + cmd_text + name_text) * 7.8 + 6
     parts.append(
-        f'<rect class="blink" x="{cur_x:.1f}" y="{pl_y+4}" width="7" height="16" fill="{CURSOR}" opacity="0">'
-        f'<set attributeName="opacity" to="1" begin="{STATUS_START + 0.75:.2f}s"/>'
+        f'<rect class="blink" x="{cursor_x:.1f}" y="{status_y-13:.1f}" width="8" height="15" fill="{CURSOR}" opacity="0">'
+        f'<set attributeName="opacity" to="1" begin="{STATUS_START + 0.8:.2f}s"/>'
         f'</rect>'
     )
 
