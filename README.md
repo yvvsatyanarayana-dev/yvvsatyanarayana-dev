@@ -50,13 +50,4 @@
 
 <br>
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=python,cpp,fastapi,flask,react,javascript,html,css,postgresql,mongodb,git,github,vscode,postman" alt="Tech Stack Icons" />
-</p>
-
-<br>
-
-
-<sub>⭐ <i>Self-contained animated SVGs. Zero external tracking scripts. Automated via GitHub Actions.</i></sub>
-
 </div>

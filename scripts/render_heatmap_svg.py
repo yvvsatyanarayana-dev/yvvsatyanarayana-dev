@@ -109,10 +109,24 @@ def render(data):
 
     css = f"""
 @keyframes cell {{
-  0%   {{ opacity: 0; transform: translateY(-6px); }}
-  100% {{ opacity: 1; transform: translateY(0); }}
+  0%   {{ opacity: 0; transform: scale(0.3) translateY(-4px); }}
+  65%  {{ transform: scale(1.15) translateY(0); }}
+  100% {{ opacity: 1; transform: scale(1) translateY(0); }}
 }}
-.c {{ opacity: 0; animation: cell {CELL_DUR:.2f}s cubic-bezier(.2,.8,.2,1) both; }}
+.c {{
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: cell {CELL_DUR:.2f}s cubic-bezier(.2,.8,.2,1) both;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}}
+.c:hover {{
+  transform: scale(1.35);
+  filter: drop-shadow(0 0 5px #39d353);
+  stroke: #ffffff;
+  stroke-width: 0.8px;
+  cursor: pointer;
+}}
 @media (prefers-reduced-motion: reduce) {{
   .c {{ opacity: 1 !important; transform: none !important; animation: none !important; }}
 }}

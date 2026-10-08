@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """
 Render the streak / numbers card from data/contributions.json as an animated
-terminal-window SVG (stats.svg) that pairs with the portrait or info card.
+terminal-window SVG (stats.svg) that pairs symmetrically with the ASCII portrait.
 
 - Canvas: 840 x 880
-- 6 stat tiles with SMIL count-up deceleration frames
-- Monthly contribution bar chart with scale-up reveal
+- 6 stat tiles with fluid slide-in and multi-frame SMIL count-up animations
+- Monthly contribution bar chart with spring scale-up and peak month indicator
+- Interactive CSS hover effects
 Outputs: stats.svg
 """
 
 import datetime
+import html
 import json
 import os
 import sys
@@ -25,8 +27,8 @@ FRAME = "#30363d"
 MUTED = "#7d8590"
 INK = "#e6edf3"
 GREEN = "#39d353"
-BAR = "#26a641"
-CYAN = "#22d3ee"
+BAR = "#238636"
+HOVER_STROKE = "#58a6ff"
 
 W, H = 840, 880
 PAD = 20
@@ -39,13 +41,13 @@ TILES_TOP = TITLEBAR_H + PAD + 6
 CHART_TOP = TILES_TOP + ROWS * TILE_H + (ROWS - 1) * GAP + GAP
 
 # Timing (seconds)
-TILE_STAGGER = 0.15
-SLIDE_DUR = 0.45
-COUNT_DUR = 1.2
-FRAMES = 16
-BAR_START = TILE_STAGGER * COLS * ROWS + 0.4
-BAR_STAGGER = 0.06
-BAR_DUR = 0.6
+TILE_STAGGER = 0.12
+SLIDE_DUR = 0.55
+COUNT_DUR = 1.3
+FRAMES = 24
+BAR_START = TILE_STAGGER * COLS * ROWS + 0.35
+BAR_STAGGER = 0.05
+BAR_DUR = 0.65
 
 
 def short_date(d):
@@ -88,18 +90,54 @@ def render():
         ("avg / active day", avg_per_day, "", "contributions", INK),
     ]
 
+    css = f"""
+.t {{
+  opacity: 0;
+  animation: slideIn {SLIDE_DUR}s cubic-bezier(0.16, 1, 0.3, 1) both;
+}}
+.tile-box {{
+  transition: stroke 0.25s ease, filter 0.25s ease;
+}}
+.t:hover .tile-box {{
+  stroke: {HOVER_STROKE};
+  stroke-width: 1.5;
+  filter: drop-shadow(0 4px 12px rgba(88, 166, 255, 0.2));
+}}
+@keyframes slideIn {{
+  0%   {{ opacity: 0; transform: translateY(16px); }}
+  100% {{ opacity: 1; transform: translateY(0); }}
+}}
+.b {{
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transform: scaleY(0);
+  animation: grow {BAR_DUR}s cubic-bezier(0.34, 1.25, 0.64, 1) both;
+  transition: filter 0.2s ease;
+}}
+.b:hover {{
+  filter: brightness(1.25) drop-shadow(0 -3px 8px {GREEN});
+  cursor: pointer;
+}}
+@keyframes grow {{
+  to {{ transform: scaleY(1); }}
+}}
+@media (prefers-reduced-motion: reduce) {{
+  .t, .b {{ opacity: 1 !important; transform: none !important; animation: none !important; }}
+}}
+""".strip()
+
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
         f'font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">',
-        '<style>'
-        f'.t{{opacity:0;animation:in {SLIDE_DUR}s ease-out both}}'
-        '@keyframes in{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:translateY(0)}}'
-        f'.b{{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);animation:grow {BAR_DUR}s ease-out both}}'
-        '@keyframes grow{to{transform:scaleY(1)}}'
-        '@media (prefers-reduced-motion: reduce){.t,.b{opacity:1!important;transform:none!important;animation:none!important}}'
-        '</style>',
-        '<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">'
-        f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/></linearGradient></defs>',
+        f'<style>{css}</style>',
+        '<defs>',
+        f'<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">',
+        f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/>',
+        '</linearGradient>',
+        f'<linearGradient id="peakbar" x1="0" y1="0" x2="0" y2="1">',
+        f'<stop offset="0" stop-color="#69f0a0"/><stop offset="1" stop-color="{GREEN}"/>',
+        '</linearGradient>',
+        '</defs>',
         f'<rect width="{W}" height="{H}" rx="12" fill="url(#bg)"/>',
         f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="12" fill="none" stroke="{FRAME}"/>',
         f'<line x1="0" y1="{TITLEBAR_H}" x2="{W}" y2="{TITLEBAR_H}" stroke="{FRAME}"/>',
@@ -118,17 +156,18 @@ def render():
         x = PAD + col * (TILE_W + GAP)
         y = TILES_TOP + row * (TILE_H + GAP)
         start = i * TILE_STAGGER
-        count_start = start + SLIDE_DUR * 0.6
+        count_start = start + SLIDE_DUR * 0.55
 
         parts.append(f'<g class="t" style="animation-delay:{start:.2f}s">')
-        parts.append(f'<rect x="{x:.1f}" y="{y}" width="{TILE_W:.1f}" height="{TILE_H}" rx="10" '
+        parts.append(f'<rect class="tile-box" x="{x:.1f}" y="{y}" width="{TILE_W:.1f}" height="{TILE_H}" rx="10" '
                      f'fill="{TILE}" stroke="{FRAME}"/>')
-        parts.append(f'<text x="{x+24:.1f}" y="{y+40}" fill="{MUTED}" font-size="22">$ {label}</text>')
+        parts.append(f'<text x="{x+24:.1f}" y="{y+40}" fill="{MUTED}" font-size="22">$ {html.escape(label)}</text>')
 
         num_y = y + 100
         for k in range(1, FRAMES + 1):
             p = k / FRAMES
-            v = value * (1 - (1 - p) ** 3)
+            # Decelerating easing curve for count-up
+            v = value * (1 - (1 - p) ** 3.5)
             t_on = count_start + COUNT_DUR * (k - 1) / FRAMES
             t_off = count_start + COUNT_DUR * k / FRAMES
             anim = f'<set attributeName="opacity" to="1" begin="{t_on:.3f}s"/>'
@@ -136,18 +175,18 @@ def render():
                 anim += f'<set attributeName="opacity" to="0" begin="{t_off:.3f}s"/>'
             parts.append(
                 f'<text x="{x+24:.1f}" y="{num_y}" opacity="0" font-size="54" font-weight="700" fill="{accent}">'
-                f'{fmt(v, value)}<tspan font-size="24" font-weight="400" fill="{MUTED}">{suffix}</tspan>'
+                f'{fmt(v, value)}<tspan font-size="24" font-weight="400" fill="{MUTED}">{html.escape(suffix)}</tspan>'
                 f'{anim}</text>'
             )
-        parts.append(f'<text x="{x+24:.1f}" y="{y+132}" fill="{MUTED}" font-size="20">{caption}</text>')
+        parts.append(f'<text x="{x+24:.1f}" y="{y+132}" fill="{MUTED}" font-size="20">{html.escape(caption)}</text>')
         parts.append('</g>')
 
     # Monthly bars
     monthly = data.get("monthly", [])
     chart_x, chart_w = PAD, W - PAD * 2
     chart_h = H - PAD - CHART_TOP
-    parts.append(f'<g class="t" style="animation-delay:{BAR_START - 0.3:.2f}s">')
-    parts.append(f'<rect x="{chart_x}" y="{CHART_TOP}" width="{chart_w}" height="{chart_h}" rx="10" '
+    parts.append(f'<g class="t" style="animation-delay:{BAR_START - 0.25:.2f}s">')
+    parts.append(f'<rect class="tile-box" x="{chart_x}" y="{CHART_TOP}" width="{chart_w}" height="{chart_h}" rx="10" '
                  f'fill="{TILE}" stroke="{FRAME}"/>')
     parts.append(f'<text x="{chart_x+24}" y="{CHART_TOP+40}" fill="{MUTED}" font-size="22">$ contributions / month</text>')
     parts.append('</g>')
@@ -160,9 +199,9 @@ def render():
         bar_w = slot * 0.62
         peak = max(m["total"] for m in monthly) or 1
         for i, m in enumerate(monthly):
-            h = max(2, (plot_bot - plot_top) * m["total"] / peak)
+            h = max(3, (plot_bot - plot_top) * m["total"] / peak)
             bx = plot_l + i * slot + (slot - bar_w) / 2
-            fill = GREEN if m["total"] == peak else BAR
+            fill = "url(#peakbar)" if m["total"] == peak else BAR
             delay = BAR_START + i * BAR_STAGGER
             parts.append(f'<rect class="b" x="{bx:.1f}" y="{plot_bot - h:.1f}" width="{bar_w:.1f}" height="{h:.1f}" '
                          f'rx="3" fill="{fill}" style="animation-delay:{delay:.2f}s"/>')
@@ -171,7 +210,7 @@ def render():
                          f'text-anchor="middle">{mon}</text>')
             if m["total"] == peak:
                 parts.append(f'<text class="t" style="animation-delay:{delay + BAR_DUR:.2f}s" x="{bx + bar_w/2:.1f}" '
-                             f'y="{plot_bot - h - 10:.1f}" fill="{INK}" font-size="18" text-anchor="middle">{peak:,}</text>')
+                             f'y="{plot_bot - h - 10:.1f}" fill="{INK}" font-size="18" font-weight="700" text-anchor="middle">{peak:,}</text>')
 
     parts.append('</svg>')
     svg = "".join(parts)
