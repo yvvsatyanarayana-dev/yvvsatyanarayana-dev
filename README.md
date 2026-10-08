@@ -56,16 +56,6 @@
 
 <br>
 
-<!-- Optional toggle/details for neofetch info card -->
-<details>
-  <summary><b>💻 Click to view system info card (<code>neofetch</code>)</b></summary>
-  <br>
-  <p align="center">
-    <img src="./info-card.svg" width="600" alt="Satyanarayana — Neofetch Info Card" />
-  </p>
-</details>
-
-<br>
 
 <sub>⭐ <i>Self-contained animated SVGs. Zero external tracking scripts. Automated via GitHub Actions.</i></sub>
 
