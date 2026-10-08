@@ -20,7 +20,7 @@ from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Find default input file
-default_inputs = ["IAM.jpeg", "source-photo.jpg", "source-photo.png", "source-photo.jpeg"]
+default_inputs = ["iam.jpg", "iam.jpeg", "iam.png", "IAM.jpeg", "source-photo.jpg", "source-photo.png", "source-photo.jpeg"]
 input_file = None
 if len(sys.argv) > 1:
     input_file = sys.argv[1]
