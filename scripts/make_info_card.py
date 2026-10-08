@@ -11,6 +11,7 @@ Canvas is 840 x 880 to pair with the ASCII portrait in a side-by-side README tab
 Outputs: info-card.svg
 """
 
+import html
 import os
 import sys
 
@@ -120,9 +121,10 @@ def build_svg():
         delay = idx * 0.05
         delay_style = f' style="animation-delay:{delay:.2f}s"' if not STATIC else ''
         art_color = CYAN if "PYTHON" in line else (BLUE if "BACKEND" in line else (PURPLE if "SYSTEM" in line else CYAN))
+        safe_line = html.escape(line)
         parts.append(
             f'<text class="row"{delay_style} x="{ascii_x}" y="{y}" fill="{art_color}" '
-            f'font-size="16" font-weight="600" xml:space="preserve">{line}</text>'
+            f'font-size="16" font-weight="600" xml:space="preserve">{safe_line}</text>'
         )
 
     # Draw right column info
@@ -137,16 +139,16 @@ def build_svg():
             parts.append(
                 f'<g class="row"{delay_style}>'
                 f'<text x="{info_x}" y="{y_pos}" font-size="22" font-weight="700">'
-                f'<tspan fill="{CYAN}">{user}</tspan>'
+                f'<tspan fill="{CYAN}">{html.escape(user)}</tspan>'
                 f'<tspan fill="{MUTED}">@</tspan>'
-                f'<tspan fill="{BLUE}">{host}</tspan>'
+                f'<tspan fill="{BLUE}">{html.escape(host)}</tspan>'
                 f'</text></g>'
             )
             y_pos += 26
         elif item[0] == "rule":
             parts.append(
                 f'<text class="row"{delay_style} x="{info_x}" y="{y_pos}" fill="{FRAME}" '
-                f'font-size="15">{item[1]}</text>'
+                f'font-size="15">{html.escape(item[1])}</text>'
             )
             y_pos += 34
         else:
@@ -154,8 +156,8 @@ def build_svg():
             parts.append(
                 f'<g class="row"{delay_style}>'
                 f'<text x="{info_x}" y="{y_pos}" font-size="17">'
-                f'<tspan fill="{CYAN}" font-weight="600">{key}: </tspan>'
-                f'<tspan fill="{val_color}">{val}</tspan>'
+                f'<tspan fill="{CYAN}" font-weight="600">{html.escape(key)}: </tspan>'
+                f'<tspan fill="{val_color}">{html.escape(val)}</tspan>'
                 f'</text></g>'
             )
             y_pos += 38
