@@ -1,49 +1,72 @@
-<!-- Professional Banner -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=SOFTWARE%20DEVELOPER&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=40&desc=PYTHON%20|%20API%20DEVELOPMENT%20|%20WEB%20SERVICES&descAlignY=60"/>
+<div align="center">
 
----
+<!-- =======================================================
+     ANIMATED GITHUB CONTRIBUTION HEATMAP
+     Scraped live, revealed with diagonal CSS keyframe sweep
+     Regenerated daily via .github/workflows/update-profile-art.yml
+     ======================================================= -->
 
-# Hi 👋 I'm Satyanarayana
+<h3><code>satyanarayana@github ~ $ ./contributions.sh</code></h3>
 
-Backend developer focused on building reliable APIs and solving real-world problems with Python. I enjoy learning new technologies and developing practical software projects.
+<img src="./contrib-heatmap.svg" width="860" alt="Satyanarayana's GitHub contribution graph — auto-refreshed daily" />
 
----
+<br>
+<br>
 
-## About Me
+<!-- =======================================================
+     WHOAMI: SELF-TYPING ASCII PORTRAIT + NEOFETCH INFO CARD
+     Both SVGs are 840x880 for pixel-perfect symmetrical alignment
+     ======================================================= -->
 
-* Backend development with Python
-* Interested in building scalable web applications
-* Currently improving system design and backend architecture
-* Focused on writing clean and maintainable code
+<h3><code>satyanarayana@github ~ $ whoami</code></h3>
 
----
+<table>
+  <tr>
+    <td valign="top" align="center">
+      <img src="./portrait-ascii.svg" width="420" alt="Satyanarayana — Self-Typing ASCII Portrait" />
+    </td>
+    <td valign="top" align="center">
+      <img src="./info-card.svg" width="420" alt="Satyanarayana — Neofetch Info Card" />
+    </td>
+  </tr>
+</table>
 
-## Tech Stack
+<br>
+<br>
+
+<!-- =======================================================
+     CONNECT & LINKS
+     ======================================================= -->
+
+<h3><code>satyanarayana@github ~ $ ./links.sh</code></h3>
+
+<p><b>Backend Developer · Scalable APIs · Python & System Design</b></p>
+
+[![GitHub](https://img.shields.io/badge/GitHub-yvvsatyanarayana--dev-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yvvsatyanarayana-dev)
+[![LeetCode](https://img.shields.io/badge/LeetCode-y--v--v--satyanarayana-FFA116?style=for-the-badge&logo=leetcode&logoColor=black)](https://leetcode.com/y-v-v-satyanarayana)
+[![HackerRank](https://img.shields.io/badge/HackerRank-yvvsatyanarayan1-2EC866?style=for-the-badge&logo=hackerrank&logoColor=white)](https://www.hackerrank.com/yvvsatyanarayan1)
+[![Dev.to](https://img.shields.io/badge/Dev.to-satyanarayana999-0A0A0A?style=for-the-badge&logo=devdotto&logoColor=white)](https://dev.to/satyanarayana999)
+[![Email](https://img.shields.io/badge/Email-yvvsatyanarayana999%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:yvvsatyanarayana999@gmail.com)
+
+<br>
 
 <p align="center">
-<img src="https://skillicons.dev/icons?i=python,cpp,fastapi,flask,react,javascript,html,css,bootstrap,postgresql,mongodb,git,github,vscode,postman"/>
+  <img src="https://skillicons.dev/icons?i=python,cpp,fastapi,flask,react,javascript,html,css,postgresql,mongodb,git,github,vscode,postman" alt="Tech Stack Icons" />
 </p>
 
----
+<br>
 
-## GitHub Stats
+<!-- Optional toggle/details for full metrics card -->
+<details>
+  <summary><b>📊 Click to view full analytics & monthly breakdown (<code>./stats.sh</code>)</b></summary>
+  <br>
+  <p align="center">
+    <img src="./stats.svg" width="600" alt="Satyanarayana — Stats & Monthly Activity" />
+  </p>
+</details>
 
-<p align="center">
+<br>
 
-<img height="170" src="https://streak-stats.demolab.com?user=yvvsatyanarayana-dev&theme=github-dark-blue&hide_border=true"/>
+<sub>⭐ <i>Self-contained animated SVGs. Zero external tracking scripts. Automated via GitHub Actions.</i></sub>
 
-</p>
-
----
-
-## Connect
-
-<p align="left">
-<a href="https://github.com/yvvsatyanarayana-dev"><img src="https://skillicons.dev/icons?i=github" width="40"/></a>&nbsp;&nbsp;&nbsp;
-<a href="mailto:yvvsatyanarayana999@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="40"/></a>&nbsp;&nbsp;&nbsp;
-<a href="https://dev.to/satyanarayana999"><img src="https://skillicons.dev/icons?i=devto" width="40"/></a>&nbsp;&nbsp;&nbsp;
-<a href="https://www.hackerrank.com/yvvsatyanarayan1"><img src="https://cdn.worldvectorlogo.com/logos/hackerrank.svg" width="40"/></a>&nbsp;&nbsp;&nbsp;
-<a href="https://leetcode.com/y-v-v-satyanarayana"><img src="https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png" width="40"/></a>
-</p>
-
-### ⭐ Always learning and building better software.
+</div>
