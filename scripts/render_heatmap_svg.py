@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 """
-Render data/contributions.json (produced by fetch_contributions.py) as an animated
-terminal contribution heatmap SVG:
-- 53-week x 7-day calendar grid of rounded boxes
-- Diagonal slide-down reveal animation with keyframes (plays on load, freezes)
-- Less -> More color ramp legend
-- Total contributions, streaks, best day, and date range stats footer
-- Terminal title bar with colored controls
-
+Render data/contributions.json as a stealth Black & White / Obsidian contribution heatmap SVG:
+- Premium minimalist monochrome palette (deep obsidian to pure white)
+- Diagonal scale-wave reveal animation with white glow hover effects
+- Sleek monochrome terminal titlebar
+- Real stats footer in crisp white and grayscale
 Outputs: contrib-heatmap.svg
 """
 
 import datetime
+import html
 import json
 import os
 import sys
@@ -20,8 +18,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 IN_PATH = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "data", "contributions.json")
 OUT_PATH = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "..", "contrib-heatmap.svg")
 
-# GitHub green palette ramp: empty -> level 5
-PALETTE = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353", "#69f0a0"]
+# Stealth monochrome ramp: empty -> level 5
+PALETTE = ["#141414", "#262626", "#454545", "#737373", "#b3b3b3", "#ffffff"]
 
 CELL = 12
 GAP = 3
@@ -29,20 +27,17 @@ STEP = CELL + GAP
 PAD = 22
 LEFT_LABEL_W = 30
 TOP_LABEL_H = 20
-TITLEBAR_H = 30
+TITLEBAR_H = 34
 
-BG = "#0a0e14"
-BG2 = "#0d1420"
-FRAME = "#1f6feb"
-MUTED = "#7d8590"
-TEXT = "#e6edf3"
-ACCENT = "#22d3ee"
-GREEN = "#39d353"
-GOLD = "#f2cc60"
+BG = "#060606"
+BG2 = "#0f0f0f"
+FRAME = "#262626"
+MUTED = "#737373"
+TEXT = "#e5e5e5"
+WHITE = "#ffffff"
 
-# Reveal animation timing
-COL_T = 0.018   # Delay step per column (horizontal sweep)
-ROW_T = 0.045   # Delay step per row (vertical sweep)
+COL_T = 0.018
+ROW_T = 0.045
 CELL_DUR = 0.42
 
 
@@ -64,7 +59,7 @@ def build_grid(days):
     if not days:
         return []
     first = datetime.date.fromisoformat(days[0]["date"])
-    lead_pad = (first.weekday() + 1) % 7  # Sunday = 0
+    lead_pad = (first.weekday() + 1) % 7
     grid = []
     col = [None] * lead_pad
     for d in days:
@@ -109,7 +104,7 @@ def render(data):
 
     css = f"""
 @keyframes cell {{
-  0%   {{ opacity: 0; transform: scale(0.3) translateY(-4px); }}
+  0%   {{ opacity: 0; transform: scale(0.25) translateY(-4px); }}
   65%  {{ transform: scale(1.15) translateY(0); }}
   100% {{ opacity: 1; transform: scale(1) translateY(0); }}
 }}
@@ -122,7 +117,7 @@ def render(data):
 }}
 .c:hover {{
   transform: scale(1.35);
-  filter: drop-shadow(0 0 5px #39d353);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
   stroke: #ffffff;
   stroke-width: 0.8px;
   cursor: pointer;
@@ -139,19 +134,24 @@ def render(data):
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{canvas_w}" height="{canvas_h}" '
         f'viewBox="0 0 {canvas_w} {canvas_h}" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">',
         f'<style>{css}</style>',
-        '<defs>'
-        f'<linearGradient id="hbg" x1="0" y1="0" x2="0" y2="1">'
-        f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/></linearGradient>'
+        '<defs>',
+        f'<linearGradient id="hbg" x1="0" y1="0" x2="0" y2="1">',
+        f'<stop offset="0%" stop-color="{BG2}"/><stop offset="100%" stop-color="{BG}"/>',
+        '</linearGradient>',
         '</defs>',
         f'<rect width="{canvas_w}" height="{canvas_h}" rx="12" fill="url(#hbg)"/>',
         f'<rect x="0.5" y="0.5" width="{canvas_w-1}" height="{canvas_h-1}" rx="12" '
-        f'fill="none" stroke="{FRAME}" stroke-width="1" stroke-opacity="0.55"/>',
-        f'<line x1="0" y1="{TITLEBAR_H}" x2="{canvas_w}" y2="{TITLEBAR_H}" stroke="{FRAME}" stroke-opacity="0.35"/>',
+        f'fill="none" stroke="{FRAME}" stroke-width="1"/>',
+        f'<line x1="0" y1="{TITLEBAR_H}" x2="{canvas_w}" y2="{TITLEBAR_H}" stroke="{FRAME}" stroke-opacity="0.8"/>',
     ]
-    for i, dotcol in enumerate(["#ff5f56", "#ffbd2e", "#27c93f"]):
+
+    # Minimalist monochrome traffic dots
+    for i, dotcol in enumerate(["#333333", "#4d4d4d", "#666666"]):
         parts.append(f'<circle cx="{PAD + i*16}" cy="{TITLEBAR_H/2}" r="5" fill="{dotcol}"/>')
-    parts.append(f'<text x="{canvas_w/2}" y="{TITLEBAR_H/2 + 4}" fill="{MUTED}" font-size="12" '
-                 f'text-anchor="middle">{user_handle}@github: ~/contributions --graph</text>')
+    parts.append(
+        f'<text x="{canvas_w/2}" y="{TITLEBAR_H/2 + 4}" fill="{MUTED}" font-size="12" '
+        f'text-anchor="middle">{user_handle}@github: ~/contributions --graph</text>'
+    )
 
     grid_top = TITLEBAR_H + TOP_LABEL_H
     grid_left = PAD + LEFT_LABEL_W
@@ -190,7 +190,7 @@ def render(data):
     parts.append(f'<text x="{lx + 4}" y="{leg_y + CELL*0.8:.1f}" fill="{MUTED}" font-size="10">More</text>')
 
     sep_y = leg_y + CELL + 14
-    parts.append(f'<line x1="0" y1="{sep_y}" x2="{canvas_w}" y2="{sep_y}" stroke="{FRAME}" stroke-opacity="0.25"/>')
+    parts.append(f'<line x1="0" y1="{sep_y}" x2="{canvas_w}" y2="{sep_y}" stroke="{FRAME}" stroke-opacity="0.8"/>')
 
     cs = data["current_streak"]["length"]
     ls = data["longest_streak"]["length"]
@@ -199,18 +199,26 @@ def render(data):
     rng = data["range"]
 
     ly = sep_y + 24
-    parts.append(f'<text x="{PAD}" y="{ly}" font-size="13" fill="{GREEN}">'
-                 f'<tspan font-weight="700">{total:,}</tspan>'
-                 f'<tspan fill="{MUTED}"> contributions in the last year</tspan></text>')
-    parts.append(f'<text x="{canvas_w - PAD}" y="{ly}" font-size="12" fill="{MUTED}" text-anchor="end">'
-                 f'{rng["start"]} &#8594; {rng["end"]}</text>')
+    parts.append(
+        f'<text x="{PAD}" y="{ly}" font-size="13" fill="{WHITE}">'
+        f'<tspan font-weight="700">{total:,}</tspan>'
+        f'<tspan fill="{MUTED}"> contributions in the last year</tspan></text>'
+    )
+    parts.append(
+        f'<text x="{canvas_w - PAD}" y="{ly}" font-size="12" fill="{MUTED}" text-anchor="end">'
+        f'{rng["start"]} &#8594; {rng["end"]}</text>'
+    )
     ly += 24
-    parts.append(f'<text x="{PAD}" y="{ly}" font-size="13" fill="{MUTED}">current streak '
-                 f'<tspan fill="{ACCENT}" font-weight="700">{cs} days</tspan>'
-                 f'<tspan fill="{MUTED}">   &#183;   longest </tspan>'
-                 f'<tspan fill="{ACCENT}" font-weight="700">{ls} days</tspan></text>')
-    parts.append(f'<text x="{canvas_w - PAD}" y="{ly}" font-size="12" fill="{MUTED}" text-anchor="end">'
-                 f'best day <tspan fill="{GOLD}" font-weight="700">{best["count"]}</tspan> on {best["date"]}</text>')
+    parts.append(
+        f'<text x="{PAD}" y="{ly}" font-size="13" fill="{MUTED}">current streak '
+        f'<tspan fill="{WHITE}" font-weight="700">{cs} days</tspan>'
+        f'<tspan fill="{MUTED}">   &#183;   longest </tspan>'
+        f'<tspan fill="{WHITE}" font-weight="700">{ls} days</tspan></text>'
+    )
+    parts.append(
+        f'<text x="{canvas_w - PAD}" y="{ly}" font-size="12" fill="{MUTED}" text-anchor="end">'
+        f'best day <tspan fill="{WHITE}" font-weight="700">{best["count"]}</tspan> on {best["date"]}</text>'
+    )
 
     parts.append("</svg>")
     return "".join(parts)

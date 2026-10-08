@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Render the streak / numbers card from data/contributions.json as an animated
-terminal-window SVG (stats.svg) that pairs symmetrically with the ASCII portrait.
-
-- Canvas: 840 x 880
-- 6 stat tiles with fluid slide-in and multi-frame SMIL count-up animations
-- Monthly contribution bar chart with spring scale-up and peak month indicator
-- Interactive CSS hover effects
+Render the streak / numbers card as a stealth Black & White / Obsidian terminal SVG:
+- Deep obsidian chassis with clean zinc borders
+- 6 minimalist stat tiles with crisp white typography
+- 24-frame mechanical slot-counter count-up
+- Monthly contribution bar chart with spotlight-white peak bar
+- Interactive hover effects in monochrome
 Outputs: stats.svg
 """
 
@@ -20,15 +19,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "data", "contributions.json")
 OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "..", "stats.svg")
 
-BG = "#0d1117"
-BG2 = "#111722"
-TILE = "#161b22"
-FRAME = "#30363d"
-MUTED = "#7d8590"
-INK = "#e6edf3"
-GREEN = "#39d353"
-BAR = "#238636"
-HOVER_STROKE = "#58a6ff"
+BG = "#060606"
+BG2 = "#0f0f0f"
+TILE = "#121212"
+FRAME = "#262626"
+MUTED = "#737373"
+INK = "#ffffff"
+BAR = "#3a3a3a"
+PEAK_BAR = "#ffffff"
 
 W, H = 840, 880
 PAD = 20
@@ -82,7 +80,7 @@ def render():
     avg_per_day = data.get("avg_per_active_day", 0.0)
 
     tiles = [
-        ("current streak", cur["length"], " days", span(cur), GREEN),
+        ("current streak", cur["length"], " days", span(cur), INK),
         ("longest streak", lng["length"], " days", span(lng), INK),
         ("contributions", total_contrib, "", "in the last year", INK),
         ("active days", active_days, f" / {n_days}", f"{(active_days / n_days) * 100:.0f}% of the year", INK),
@@ -99,9 +97,9 @@ def render():
   transition: stroke 0.25s ease, filter 0.25s ease;
 }}
 .t:hover .tile-box {{
-  stroke: {HOVER_STROKE};
-  stroke-width: 1.5;
-  filter: drop-shadow(0 4px 12px rgba(88, 166, 255, 0.2));
+  stroke: #ffffff;
+  stroke-width: 1.2;
+  filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.12));
 }}
 @keyframes slideIn {{
   0%   {{ opacity: 0; transform: translateY(16px); }}
@@ -115,7 +113,7 @@ def render():
   transition: filter 0.2s ease;
 }}
 .b:hover {{
-  filter: brightness(1.25) drop-shadow(0 -3px 8px {GREEN});
+  filter: brightness(1.35) drop-shadow(0 -3px 8px #ffffff);
   cursor: pointer;
 }}
 @keyframes grow {{
@@ -132,10 +130,7 @@ def render():
         f'<style>{css}</style>',
         '<defs>',
         f'<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">',
-        f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/>',
-        '</linearGradient>',
-        f'<linearGradient id="peakbar" x1="0" y1="0" x2="0" y2="1">',
-        f'<stop offset="0" stop-color="#69f0a0"/><stop offset="1" stop-color="{GREEN}"/>',
+        f'<stop offset="0%" stop-color="{BG2}"/><stop offset="100%" stop-color="{BG}"/>',
         '</linearGradient>',
         '</defs>',
         f'<rect width="{W}" height="{H}" rx="12" fill="url(#bg)"/>',
@@ -143,7 +138,8 @@ def render():
         f'<line x1="0" y1="{TITLEBAR_H}" x2="{W}" y2="{TITLEBAR_H}" stroke="{FRAME}"/>',
     ]
 
-    for i, dot in enumerate(["#ff5f56", "#ffbd2e", "#27c93f"]):
+    # Minimalist monochrome traffic dots
+    for i, dot in enumerate(["#333333", "#4d4d4d", "#666666"]):
         parts.append(f'<circle cx="{PAD + i*16}" cy="{TITLEBAR_H/2}" r="5" fill="{dot}"/>')
     parts.append(
         f'<text x="{W/2}" y="{TITLEBAR_H/2 + 4}" fill="{MUTED}" font-size="12" '
@@ -166,7 +162,6 @@ def render():
         num_y = y + 100
         for k in range(1, FRAMES + 1):
             p = k / FRAMES
-            # Decelerating easing curve for count-up
             v = value * (1 - (1 - p) ** 3.5)
             t_on = count_start + COUNT_DUR * (k - 1) / FRAMES
             t_off = count_start + COUNT_DUR * k / FRAMES
@@ -201,7 +196,7 @@ def render():
         for i, m in enumerate(monthly):
             h = max(3, (plot_bot - plot_top) * m["total"] / peak)
             bx = plot_l + i * slot + (slot - bar_w) / 2
-            fill = "url(#peakbar)" if m["total"] == peak else BAR
+            fill = PEAK_BAR if m["total"] == peak else BAR
             delay = BAR_START + i * BAR_STAGGER
             parts.append(f'<rect class="b" x="{bx:.1f}" y="{plot_bot - h:.1f}" width="{bar_w:.1f}" height="{h:.1f}" '
                          f'rx="3" fill="{fill}" style="animation-delay:{delay:.2f}s"/>')

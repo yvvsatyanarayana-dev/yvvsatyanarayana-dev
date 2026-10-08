@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """
-Convert a prepped portrait image into an enhanced animated ASCII SVG:
-- Clean monochrome light-gray palette on dark terminal background
-- High-contrast density character ramp with leading space for clean backdrop
-- Enhanced typewriter reveal: horizontal clip wipe with a glowing traveling block cursor
-- Staggered top-to-bottom cascade that freezes into crisp high-res ASCII
-- Interactive bottom status prompt that dynamically types out 'whoami Satyanarayana'
-  with a steady blinking terminal cursor
+Convert prepped portrait image into an elite Black & White / Obsidian ASCII SVG:
+- Deep obsidian backdrop with clean zinc frame
+- Crisp monochrome ASCII typography
+- Traveling scanline cursor in pure white with soft glow
+- Bottom status prompt with smooth typewriter reveal and blinking cursor
 - Strictly valid XML for GitHub Camo caching
 
 Outputs: portrait-ascii.svg
@@ -41,14 +39,13 @@ STATUS_H = 36
 CANVAS_W = 840
 CANVAS_H = 880
 
-BG = "#0d1117"
-BG2 = "#111722"
-FRAME = "#30363d"
-TITLE_TEXT = "#7d8590"
-INK = "#c9d1d9"
-CURSOR = "#22d3ee"
+BG = "#060606"
+BG2 = "#0f0f0f"
+FRAME = "#262626"
+TITLE_TEXT = "#737373"
+INK = "#e5e5e5"
+CURSOR = "#ffffff"
 
-# Animation timing
 SWEEP_DUR = 4.8
 ROW_DUR = SWEEP_DUR / ROWS
 STAGGER = ROW_DUR
@@ -114,9 +111,9 @@ def generate():
         f'<line x1="0" y1="{TITLEBAR_H}" x2="{CANVAS_W}" y2="{TITLEBAR_H}" stroke="{FRAME}" stroke-opacity="0.8"/>',
     ]
 
-    # Titlebar controls
-    for i, dotcol in enumerate(["#ff5f56", "#ffbd2e", "#27c93f"]):
-        parts.append(f'<circle cx="{PAD + i*18}" cy="{TITLEBAR_H/2}" r="5.5" fill="{dotcol}"/>')
+    # Minimalist monochrome traffic dots
+    for i, dotcol in enumerate(["#333333", "#4d4d4d", "#666666"]):
+        parts.append(f'<circle cx="{PAD + i*16}" cy="{TITLEBAR_H/2}" r="5" fill="{dotcol}"/>')
     parts.append(
         f'<text x="{CANVAS_W/2}" y="{TITLEBAR_H/2 + 4}" fill="{TITLE_TEXT}" font-size="12" '
         f'text-anchor="middle">satyanarayana@github: ~$ ./portrait.sh</text>'
@@ -174,7 +171,7 @@ def generate():
         f'<text x="{prompt_x}" y="{status_y:.1f}" font-size="13">'
         f'<tspan fill="{TITLE_TEXT}">{html.escape(prompt_prefix)}</tspan>'
         f'<tspan fill="{TITLE_TEXT}">{html.escape(cmd_text)}</tspan>'
-        f'<tspan fill="{INK}" font-weight="600">{html.escape(name_text)}</tspan>'
+        f'<tspan fill="#ffffff" font-weight="700">{html.escape(name_text)}</tspan>'
         f'</text></g>'
     )
 
